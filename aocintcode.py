@@ -7,8 +7,11 @@ class Halt(Exception):
     pass
 
 class Program(object):
-    def __init__(self, init):
-        self.mem = list(map(int, init.strip().split(',')))
+    def __init__(self, init, clone=None):
+        if clone is not None:
+            self.mem = clone.mem[:]
+        else:
+            self.mem = list(map(int, init.strip().split(',')))
         self.pc = 0
     def binary_math_op(self, fn):
         in1_addr = self.mem[self.pc + 1]
