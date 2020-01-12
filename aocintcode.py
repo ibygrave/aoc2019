@@ -13,25 +13,51 @@ class Program(object):
         else:
             self.mem = list(map(int, init.strip().split(',')))
         self.pc = 0
-    def param(self, param_ix):
-        return self.mem[self.pc + param_ix]
+        self.param_modes = []
+    def param_mode(self, param_ix):
+        if param_ix > len(self.param_modes):
+            return 0
+        else:
+            return self.param_modes[param_ix-1]
+    def get_param(self, param_ix):
+        mode = self.param_mode(param_ix)
+        param = self.mem[self.pc + param_ix]
+        if mode == 0:
+            # position
+            return self.mem[param]
+        elif mode == 1:
+            # immediate
+            return param
+        else:
+            raise SomethingWentWrong(f"unknown parameter mode {mode}")
+    def put_param(self, param_ix, val):
+        mode = self.param_mode(param_ix)
+        param = self.mem[self.pc + param_ix]
+        if mode == 0:
+            # position
+            self.mem[param] = val
+        elif mode == 1:
+            # immediate
+            raise SomethingWentWrong("Store immediate")
+        else:
+            raise SomethingWentWrong(f"unknown parameter mode {mode}")
     def binary_math_op(self, fn):
-        in1_addr = self.param(1)
-        in2_addr = self.param(2)
-        out_addr = self.param(3)
-        in1 = self.mem[in1_addr]
-        in2 = self.mem[in2_addr]
-        self.mem[out_addr] = fn(in1, in2)
+        in1 = self.get_param(1)
+        in2 = self.get_param(2)
+        self.put_param(3, fn(in1, in2))
         return 4  # 1 opcode, 3 params
     def do_opcode_99(self):
         raise Halt()
-    def do_opcode_1(self):
+    def do_opcode_01(self):
         return self.binary_math_op(lambda x, y: x+y)
-    def do_opcode_2(self):
+    def do_opcode_02(self):
         return self.binary_math_op(lambda x, y: x*y)
     def step(self):
         try:
-            opcode = self.mem[self.pc]
+            instr = self.mem[self.pc]
+            instr = f"{instr:02}"
+            opcode = instr[-2:]
+            self.param_modes = list(int(m) for m in instr[:-2])[::-1]
             do_opcode = getattr(self, f"do_opcode_{opcode}")
         except (IndexError, AttributeError) as err:
             raise SomethingWentWrong() from err
@@ -50,13 +76,11 @@ class TestProgram(Program):
         super().__init__(init)
         self.in_iter = in_iter  # yields input
         self.out_fn = out_fn  # called with output
-    def do_opcode_3(self):
-        in_addr = self.param(1)
+    def do_opcode_03(self):
         in_val = next(self.in_iter)
-        self.mem[in_addr] = in_val
+        self.put_param(1, in_val)
         return 2  # 1 opcode, 1 param
-    def do_opcode_4(self):
-        out_addr = self.param(1)
-        out_val = self.mem[out_addr]
+    def do_opcode_04(self):
+        out_val = self.get_param(1)
         self.out_fn(out_val)
         return 2  # 1 opcode, 1 param
