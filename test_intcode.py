@@ -22,7 +22,7 @@ def test_program_a(program, out):
     ])
 def test_program_b(program, in_data, out_data):
     prog = aocintcode.TestProgram(program)
-    prog.set_input(v for v in in_data)
+    prog.set_input(iter(in_data))
     assert program == str(prog)
     prog_out_data = list(prog)
     assert out_data == prog_out_data

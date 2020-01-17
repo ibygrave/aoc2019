@@ -86,3 +86,11 @@ class TestProgram(Program):
             raise StopIteration()
         else:
             return self.next_out
+
+
+def run_test_program(prog, system_ids=[1]):
+    prog.set_input(iter(system_ids))
+    outputs = list(prog)
+    errors, diagnostic = outputs[:-1], outputs[-1]
+    assert all(error == 0 for error in errors)
+    return diagnostic
