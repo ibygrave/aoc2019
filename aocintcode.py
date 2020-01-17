@@ -2,9 +2,6 @@ class SomethingWentWrong(Exception):
     pass
 
 
-class Halt(Exception):
-    pass
-
 class Program(object):
     def __init__(self, init, clone=None):
         if clone is not None:
@@ -12,6 +9,7 @@ class Program(object):
         else:
             self.mem = list(map(int, init.strip().split(',')))
         self.pc = 0
+        self.running = True
     def param_mode(self, param_ix):
         if param_ix > len(self.param_modes):
             return 0
@@ -45,7 +43,7 @@ class Program(object):
         self.put_param(3, fn(in1, in2))
         self.next_pc = self.pc + 4  # 1 opcode, 3 params
     def do_opcode_99(self):
-        raise Halt()
+        self.running = False
     def do_opcode_01(self):
         self.binary_math_op(lambda x, y: x+y)
     def do_opcode_02(self):
@@ -63,11 +61,8 @@ class Program(object):
         do_opcode()
         self.pc = self.next_pc
     def run(self):
-        try:
-            while True:
-                self.step()
-        except Halt as err:
-            pass
+        while self.running:
+            self.step()
     def __str__(self):
         return ','.join(str(x) for x in self.mem)
 
@@ -88,8 +83,5 @@ class TestProgram(Program):
         if self.next_out is not None:
             yield self.next_out
     def run(self):
-        try:
-            while True:
-                yield from self.step()
-        except Halt as err:
-            pass
+        while self.running:
+            yield from self.step()
