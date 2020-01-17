@@ -67,8 +67,7 @@ class Program(object):
         return ','.join(str(x) for x in self.mem)
 
 class TestProgram(Program):
-    def __init__(self, init, in_iter):
-        super().__init__(init)
+    def set_input(self, in_iter):
         self.in_iter = in_iter  # yields input
     def do_opcode_03(self):
         in_val = next(self.in_iter)

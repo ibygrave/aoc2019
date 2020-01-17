@@ -21,11 +21,8 @@ def test_program_a(program, out):
     ("3,0,4,0,99", [3141], [3141]),
     ])
 def test_program_b(program, in_data, out_data):
-    prog_out_data = []
-    def in_gen():
-        for v in in_data:
-            yield v
-    prog = aocintcode.TestProgram(program, in_gen())
+    prog = aocintcode.TestProgram(program)
+    prog.set_input(v for v in in_data)
     assert program == str(prog)
     prog_out_data = list(prog)
     assert out_data == prog_out_data
