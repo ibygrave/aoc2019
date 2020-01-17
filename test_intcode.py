@@ -25,9 +25,7 @@ def test_program_b(program, in_data, out_data):
     def in_gen():
         for v in in_data:
             yield v
-    def out_fn(v):
-        prog_out_data.append(v)
-    prog = aocintcode.TestProgram(program, in_gen(), out_fn)
+    prog = aocintcode.TestProgram(program, in_gen())
     assert program == str(prog)
-    prog.run()
+    prog_out_data = list(prog.run())
     assert out_data == prog_out_data

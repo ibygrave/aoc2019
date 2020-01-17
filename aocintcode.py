@@ -72,15 +72,24 @@ class Program(object):
         return ','.join(str(x) for x in self.mem)
 
 class TestProgram(Program):
-    def __init__(self, init, in_iter, out_fn):
+    def __init__(self, init, in_iter):
         super().__init__(init)
         self.in_iter = in_iter  # yields input
-        self.out_fn = out_fn  # called with output
     def do_opcode_03(self):
         in_val = next(self.in_iter)
         self.put_param(1, in_val)
         self.next_pc = self.pc + 2  # 1 opcode, 1 param
     def do_opcode_04(self):
-        out_val = self.get_param(1)
-        self.out_fn(out_val)
+        self.next_out = self.get_param(1)
         self.next_pc = self.pc + 2  # 1 opcode, 1 param
+    def step(self):
+        self.next_out = None
+        super().step()
+        if self.next_out is not None:
+            yield self.next_out
+    def run(self):
+        try:
+            while True:
+                yield from self.step()
+        except Halt as err:
+            pass
