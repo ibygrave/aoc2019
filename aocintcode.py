@@ -1,4 +1,3 @@
-
 class SomethingWentWrong(Exception):
     pass
 
@@ -13,7 +12,6 @@ class Program(object):
         else:
             self.mem = list(map(int, init.strip().split(',')))
         self.pc = 0
-        self.param_modes = []
     def param_mode(self, param_ix):
         if param_ix > len(self.param_modes):
             return 0
@@ -45,14 +43,15 @@ class Program(object):
         in1 = self.get_param(1)
         in2 = self.get_param(2)
         self.put_param(3, fn(in1, in2))
-        return 4  # 1 opcode, 3 params
+        self.next_pc = self.pc + 4  # 1 opcode, 3 params
     def do_opcode_99(self):
         raise Halt()
     def do_opcode_01(self):
-        return self.binary_math_op(lambda x, y: x+y)
+        self.binary_math_op(lambda x, y: x+y)
     def do_opcode_02(self):
-        return self.binary_math_op(lambda x, y: x*y)
+        self.binary_math_op(lambda x, y: x*y)
     def step(self):
+        self.next_pc = None
         try:
             instr = self.mem[self.pc]
             instr = f"{instr:02}"
@@ -61,7 +60,8 @@ class Program(object):
             do_opcode = getattr(self, f"do_opcode_{opcode}")
         except (IndexError, AttributeError) as err:
             raise SomethingWentWrong() from err
-        self.pc += do_opcode()
+        do_opcode()
+        self.pc = self.next_pc
     def run(self):
         try:
             while True:
@@ -79,8 +79,8 @@ class TestProgram(Program):
     def do_opcode_03(self):
         in_val = next(self.in_iter)
         self.put_param(1, in_val)
-        return 2  # 1 opcode, 1 param
+        self.next_pc = self.pc + 2  # 1 opcode, 1 param
     def do_opcode_04(self):
         out_val = self.get_param(1)
         self.out_fn(out_val)
-        return 2  # 1 opcode, 1 param
+        self.next_pc = self.pc + 2  # 1 opcode, 1 param
