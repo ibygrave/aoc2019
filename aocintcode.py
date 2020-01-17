@@ -48,6 +48,32 @@ class Program(object):
         self.binary_math_op(lambda x, y: x+y)
     def do_opcode_02(self):
         self.binary_math_op(lambda x, y: x*y)
+    def do_opcode_05(self):
+        """jump-if-true"""
+        if self.get_param(1) != 0:
+            self.next_pc = self.get_param(2)
+        else:
+            self.next_pc = self.pc + 3  # 1 opcode, 2 params
+    def do_opcode_06(self):
+        """jump-if-false"""
+        if self.get_param(1) == 0:
+            self.next_pc = self.get_param(2)
+        else:
+            self.next_pc = self.pc + 3  # 1 opcode, 2 params
+    def do_opcode_07(self):
+        """less than"""
+        if self.get_param(1) < self.get_param(2):
+            self.put_param(3, 1)
+        else:
+            self.put_param(3, 0)
+        self.next_pc = self.pc + 4  # 1 opcode, 3 params
+    def do_opcode_08(self):
+        """equals"""
+        if self.get_param(1) == self.get_param(2):
+            self.put_param(3, 1)
+        else:
+            self.put_param(3, 0)
+        self.next_pc = self.pc + 4  # 1 opcode, 3 params
     def step(self):
         self.next_pc = None
         try:
