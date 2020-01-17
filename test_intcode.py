@@ -27,5 +27,5 @@ def test_program_b(program, in_data, out_data):
             yield v
     prog = aocintcode.TestProgram(program, in_gen())
     assert program == str(prog)
-    prog_out_data = list(prog.run())
+    prog_out_data = list(prog)
     assert out_data == prog_out_data

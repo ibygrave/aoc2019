@@ -77,11 +77,13 @@ class TestProgram(Program):
     def do_opcode_04(self):
         self.next_out = self.get_param(1)
         self.next_pc = self.pc + 2  # 1 opcode, 1 param
-    def step(self):
+    def __iter__(self):
+        return self
+    def __next__(self):
         self.next_out = None
-        super().step()
-        if self.next_out is not None:
-            yield self.next_out
-    def run(self):
-        while self.running:
-            yield from self.step()
+        while self.running and self.next_out is None:
+            super().step()
+        if self.next_out is None:
+            raise StopIteration()
+        else:
+            return self.next_out
