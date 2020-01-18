@@ -30,6 +30,32 @@ class OrbitMap(object):
             yield self.objects[oname]
     def count_orbits(self):
         return sum(o.count_orbits(self) for o in self.walk())
+    def plan_route(self, o_from, o_to):
+        # plan route via nearest common ancestor in tree of orbits
+        # route consists of two parts, up the tree to nca,
+        # then down the tree to goal
+        route_up = []
+        route_down = []
+        def go_up(oname, route):
+            transfer = self.objects[oname].orbits
+            route.append(transfer)
+            return transfer
+        # treat orbit_count as depth in orbit map tree
+        def get_depth(oname):
+            return self.objects[oname].orbit_count
+        min_depth = min(get_depth(o_from), get_depth(o_to))
+        # get both sides of the route to the same depth
+        while get_depth(o_from) > min_depth:
+            o_from = go_up(o_from, route_up)
+        while get_depth(o_to) > min_depth:
+            o_to = go_up(o_to, route_down)
+        # get both sides of the route to the nca
+        while o_from != o_to:
+            o_from = go_up(o_from, route_up)
+            o_to = go_up(o_to, route_down)
+        route_down.reverse()
+        assert route_up[-1] == route_down[0]
+        return route_up + route_down[1:]
 
 
 def count_orbits(orbit_iter):
