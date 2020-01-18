@@ -1,22 +1,38 @@
 import collections
 
-def sort_orbits(orbit_iter):
-    orbits = collections.defaultdict(list)
-    for orbit_desc in orbit_iter:
-        orbited, orbitor = orbit_desc.strip().split(')')
-        orbits[orbited].append(orbitor)
-    planets = ['COM']  # sorted, breadth first enumeration of orbits
-    for planet in planets:
-        for orbitor in orbits[planet]:
-            yield (planet, orbitor)
-        planets.extend(orbits[planet][:])
+
+class SpaceObject(object):
+    def __init__(self):
+        self.orbited_by = []
+        self.orbits = None
+    def count_orbits(self, omap):
+        if self.orbits is None:
+            self.orbit_count = 0
+        else:
+            self.orbit_count = 1 + omap.objects[self.orbits].orbit_count
+        return self.orbit_count
+
+
+class OrbitMap(object):
+    def __init__(self):
+        self.objects = collections.defaultdict(SpaceObject)
+    def input_orbits(self, orbit_iter):
+        for orbit_desc in orbit_iter:
+            orbited, orbitor = orbit_desc.strip().split(')')
+            self.objects[orbited].orbited_by.append(orbitor)
+            self.objects[orbitor].orbits = orbited
+        # Sorted, breadth first enumeration of objects
+        self.object_order = ['COM']
+        for o in self.object_order:
+            self.object_order.extend(self.objects[o].orbited_by[:])
+    def walk(self):
+        for oname in self.object_order:
+            yield self.objects[oname]
+    def count_orbits(self):
+        return sum(o.count_orbits(self) for o in self.walk())
 
 
 def count_orbits(orbit_iter):
-    total_orbits = 0
-    planet_orbits = {'COM': 0}
-    for orbited, orbitor in sort_orbits(orbit_iter):
-        new_orbits = 1 + planet_orbits[orbited]
-        planet_orbits[orbitor] = new_orbits
-        total_orbits += new_orbits
-    return total_orbits
+    omap = OrbitMap()
+    omap.input_orbits(orbit_iter)
+    return omap.count_orbits()
