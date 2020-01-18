@@ -7,55 +7,52 @@ class SpaceObject(object):
         self.orbits = None
     def count_orbits(self, omap):
         if self.orbits is None:
-            self.orbit_count = 0
+            self.depth = 0
         else:
-            self.orbit_count = 1 + omap.objects[self.orbits].orbit_count
-        return self.orbit_count
+            self.depth = 1 + omap[self.orbits].depth
+        return self.depth
 
 
-class OrbitMap(object):
+class OrbitMap(collections.defaultdict):
     def __init__(self):
-        self.objects = collections.defaultdict(SpaceObject)
+        super().__init__(SpaceObject)
     def input_orbits(self, orbit_iter):
         for orbit_desc in orbit_iter:
             orbited, orbitor = orbit_desc.strip().split(')')
-            self.objects[orbited].orbited_by.append(orbitor)
-            self.objects[orbitor].orbits = orbited
+            self[orbited].orbited_by.append(orbitor)
+            self[orbitor].orbits = orbited
         # Sorted, breadth first enumeration of objects
         self.object_order = ['COM']
         for o in self.object_order:
-            self.object_order.extend(self.objects[o].orbited_by[:])
+            self.object_order.extend(self[o].orbited_by[:])
     def walk(self):
         for oname in self.object_order:
-            yield self.objects[oname]
+            yield self[oname]
     def count_orbits(self):
         return sum(o.count_orbits(self) for o in self.walk())
-    def plan_route(self, o_from, o_to):
+    def plan_route(self, start, end):
         # plan route via nearest common ancestor in tree of orbits
         # route consists of two parts, up the tree to nca,
         # then down the tree to goal
-        route_up = []
-        route_down = []
-        def go_up(oname, route):
-            transfer = self.objects[oname].orbits
-            route.append(transfer)
-            return transfer
-        # treat orbit_count as depth in orbit map tree
-        def get_depth(oname):
-            return self.objects[oname].orbit_count
-        min_depth = min(get_depth(o_from), get_depth(o_to))
+        up = []
+        down = []
+        min_depth = min(self[start].depth, self[end].depth)
         # get both sides of the route to the same depth
-        while get_depth(o_from) > min_depth:
-            o_from = go_up(o_from, route_up)
-        while get_depth(o_to) > min_depth:
-            o_to = go_up(o_to, route_down)
+        while self[start].depth > min_depth:
+            start = self[start].orbits
+            up.append(start)
+        while self[end].depth > min_depth:
+            end = self[end].orbits
+            down.append(end)
         # get both sides of the route to the nca
-        while o_from != o_to:
-            o_from = go_up(o_from, route_up)
-            o_to = go_up(o_to, route_down)
-        route_down.reverse()
-        assert route_up[-1] == route_down[0]
-        return route_up + route_down[1:]
+        while start != end:
+            start = self[start].orbits
+            up.append(start)
+            end = self[end].orbits
+            down.append(end)
+        down.reverse()
+        assert up[-1] == down[0]
+        return up + down[1:]
 
 
 def count_orbits(orbit_iter):
