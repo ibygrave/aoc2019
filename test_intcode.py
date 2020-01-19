@@ -14,7 +14,7 @@ import aocintcode
 def test_program_a(program, out):
     prog = aocintcode.Program(program)
     assert program == str(prog)
-    prog.run()
+    assert [] == list(prog)
     assert out == str(prog)
 
 @pytest.mark.parametrize("program,in_data,out_data", [

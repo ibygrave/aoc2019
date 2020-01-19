@@ -52,6 +52,13 @@ class Program(object):
         self.binary_math_op(lambda x, y: x+y)
     def do_opcode_02(self):
         self.binary_math_op(lambda x, y: x*y)
+    def do_opcode_03(self):
+        in_val = next(self.in_iter)
+        self.put_param(1, in_val)
+        self.next_pc = self.pc + 2  # 1 opcode, 1 param
+    def do_opcode_04(self):
+        self.next_out = self.get_param(1)
+        self.next_pc = self.pc + 2  # 1 opcode, 1 param
     def do_opcode_05(self):
         """jump-if-true"""
         if self.get_param(1) != 0:
@@ -90,20 +97,10 @@ class Program(object):
             raise SomethingWentWrong() from err
         do_opcode()
         self.pc = self.next_pc
-    def run(self):
-        while self.running:
-            self.step()
     def __str__(self):
         return ','.join(str(x) for x in self.mem)
     def set_input(self, in_iter):
         self.in_iter = in_iter  # yields input
-    def do_opcode_03(self):
-        in_val = next(self.in_iter)
-        self.put_param(1, in_val)
-        self.next_pc = self.pc + 2  # 1 opcode, 1 param
-    def do_opcode_04(self):
-        self.next_out = self.get_param(1)
-        self.next_pc = self.pc + 2  # 1 opcode, 1 param
     def __iter__(self):
         return self
     def __next__(self):

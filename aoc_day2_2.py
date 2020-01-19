@@ -11,7 +11,7 @@ def search_params(start_prog, want_out):
             experiment.mem[1] = noun
             experiment.mem[2] = verb
             try:
-                experiment.run()
+                list(experiment)
             except aocintcode.SomethingWentWrong as err:
                 continue
             if experiment.mem[0] == want_out:
