@@ -14,6 +14,7 @@ class Program(object):
             self.mem = list(map(int, init.strip().split(',')))
         self.pc = 0
         self.running = True
+        self.inputs = []
     def param_mode(self, param_ix):
         if param_ix > len(self.param_modes):
             return 0
@@ -53,7 +54,7 @@ class Program(object):
     def do_opcode_02(self):
         self.binary_math_op(lambda x, y: x*y)
     def do_opcode_03(self):
-        in_val = next(self.in_iter)
+        in_val = self.inputs.pop(0)
         self.put_param(1, in_val)
         self.next_pc = self.pc + 2  # 1 opcode, 1 param
     def do_opcode_04(self):
@@ -99,8 +100,8 @@ class Program(object):
         self.pc = self.next_pc
     def __str__(self):
         return ','.join(str(x) for x in self.mem)
-    def set_input(self, in_iter):
-        self.in_iter = in_iter  # yields input
+    def set_input(self, inputs):
+        self.inputs.extend(inputs)
     def __iter__(self):
         return self
     def __next__(self):
@@ -114,7 +115,7 @@ class Program(object):
 
 
 def run_test_program(prog, system_ids=[1]):
-    prog.set_input(iter(system_ids))
+    prog.set_input(system_ids)
     outputs = list(prog)
     errors, diagnostic = outputs[:-1], outputs[-1]
     assert all(error == 0 for error in errors)
@@ -124,7 +125,7 @@ def run_test_program(prog, system_ids=[1]):
 def control_amps(prog, phases, signal=0):
     for phase in phases:
         controller = Program(prog)
-        controller.set_input(iter([phase, signal]))
+        controller.set_input([phase, signal])
         outputs = list(controller)
         assert len(outputs) == 1
         signal = outputs[0]
