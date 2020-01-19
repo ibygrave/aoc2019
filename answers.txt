@@ -22,3 +22,5 @@ Found noun = 79, verb = 60
 245089
 ./aoc_day6_2.py
 511
+./aoc_day7_1.py
+AmpControl(signal=440880, phases=[3, 2, 4, 0, 1])
