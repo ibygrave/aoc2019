@@ -118,3 +118,13 @@ def run_test_program(prog, system_ids=[1]):
     errors, diagnostic = outputs[:-1], outputs[-1]
     assert all(error == 0 for error in errors)
     return diagnostic
+
+
+def control_amps(prog, phases, signal=0):
+    for phase in phases:
+        controller = Program(prog)
+        controller.set_input(iter([phase, signal]))
+        outputs = list(controller)
+        assert len(outputs) == 1
+        signal = outputs[0]
+    return signal
