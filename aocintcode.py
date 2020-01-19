@@ -1,3 +1,7 @@
+from collections import namedtuple
+import itertools
+
+
 class SomethingWentWrong(Exception):
     pass
 
@@ -128,3 +132,13 @@ def control_amps(prog, phases, signal=0):
         assert len(outputs) == 1
         signal = outputs[0]
     return signal
+
+
+AmpControl = namedtuple('AmpControl', ['signal', 'phases'])
+def optimize_amps(prog, phases):
+    best = None
+    for phases_perm in itertools.permutations(phases):
+        signal = control_amps(prog, phases_perm)
+        if best is None or signal > best.signal:
+            best = AmpControl(signal, list(phases_perm))
+    return best
