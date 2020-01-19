@@ -132,6 +132,21 @@ def control_amps(prog, phases, signal=0):
     return signal
 
 
+def feedback_control_amps(prog, phases, signal=0):
+    ctrls = []
+    for phase in phases:
+        ctrl = Program(prog)
+        ctrl.set_input([phase])
+        ctrls.append(ctrl)
+    while True:
+        for ctrl in ctrls:
+            ctrl.set_input([signal])
+            signal = next(ctrl, None)
+            if signal is None:
+                return signal_out
+        signal_out = signal
+
+
 AmpControl = namedtuple('AmpControl', ['signal', 'phases'])
 def optimize_amps(prog, phases):
     best = None
