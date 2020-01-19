@@ -91,8 +91,6 @@ class Program(object):
             self.step()
     def __str__(self):
         return ','.join(str(x) for x in self.mem)
-
-class TestProgram(Program):
     def set_input(self, in_iter):
         self.in_iter = in_iter  # yields input
     def do_opcode_03(self):
@@ -107,7 +105,7 @@ class TestProgram(Program):
     def __next__(self):
         self.next_out = None
         while self.running and self.next_out is None:
-            super().step()
+            self.step()
         if self.next_out is None:
             raise StopIteration()
         else:
