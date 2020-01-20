@@ -148,10 +148,10 @@ def feedback_control_amps(prog, phases, signal=0):
 
 
 AmpControl = namedtuple('AmpControl', ['signal', 'phases'])
-def optimize_amps(prog, phases):
+def optimize_amps(prog, phases, control_fn):
     best = None
     for phases_perm in itertools.permutations(phases):
-        signal = control_amps(prog, phases_perm)
+        signal = control_fn(prog, phases_perm)
         if best is None or signal > best.signal:
             best = AmpControl(signal, list(phases_perm))
     return best
