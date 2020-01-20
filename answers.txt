@@ -25,4 +25,4 @@ Found noun = 79, verb = 60
 ./aoc_day7_1.py
 AmpControl(signal=440880, phases=[3, 2, 4, 0, 1])
 ./aoc_day7_2.py
-AmpControl(signal=440880, phases=[3, 2, 4, 0, 1])
+AmpControl(signal=3745599, phases=[5, 7, 9, 6, 8])
