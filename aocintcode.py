@@ -30,6 +30,9 @@ class Program(object):
         elif mode == 1:
             # immediate
             return param
+        elif mode == 2:
+            # relative
+            return self.mem[self.rbase + param]
         else:
             raise SomethingWentWrong(f"unknown parameter mode {mode}")
     def put_param(self, param_ix, val):
@@ -41,6 +44,9 @@ class Program(object):
         elif mode == 1:
             # immediate
             raise SomethingWentWrong("Store immediate")
+        elif mode == 2:
+            # relative
+            self.mem[self.rbase + param] = val
         else:
             raise SomethingWentWrong(f"unknown parameter mode {mode}")
     def binary_math_op(self, fn):
