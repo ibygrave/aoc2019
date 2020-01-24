@@ -13,6 +13,7 @@ class Program(object):
         else:
             self.mem = list(map(int, init.strip().split(',')))
         self.pc = 0
+        self.rbase = 0
         self.running = True
         self.inputs = []
     def param_mode(self, param_ix):
@@ -86,8 +87,13 @@ class Program(object):
         else:
             self.put_param(3, 0)
         self.next_pc = self.pc + 4  # 1 opcode, 3 params
+    def do_opcode_09(self):
+        """adjusts the relative base"""
+        self.next_rbase = self.rbase + self.get_param(1)
+        self.next_pc = self.pc + 2  # 1 opcode, 1 param
     def step(self):
         self.next_pc = None
+        self.next_rbase = self.rbase
         try:
             instr = self.mem[self.pc]
             instr = f"{instr:02}"
@@ -98,6 +104,7 @@ class Program(object):
             raise SomethingWentWrong() from err
         do_opcode()
         self.pc = self.next_pc
+        self.rbase = self.next_rbase
     def __str__(self):
         return ','.join(str(x) for x in self.mem)
     def set_input(self, inputs):
