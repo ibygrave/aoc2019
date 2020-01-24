@@ -6,12 +6,24 @@ class SomethingWentWrong(Exception):
     pass
 
 
+class ElasticList(list):
+    def _ensure_size(self, ix):
+        while len(self) <= ix:
+            self.append(0)
+    def __getitem__(self, key):
+        self._ensure_size(key)
+        return super().__getitem__(key)
+    def __setitem__(self, key, value):
+        self._ensure_size(key)
+        super().__setitem__(key, value)
+
+
 class Program(object):
     def __init__(self, init, clone=None):
         if clone is not None:
             self.mem = clone.mem[:]
         else:
-            self.mem = list(map(int, init.strip().split(',')))
+            self.mem = ElasticList(map(int, init.strip().split(',')))
         self.pc = 0
         self.rbase = 0
         self.running = True
