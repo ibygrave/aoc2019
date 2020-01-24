@@ -8,6 +8,10 @@ class SomethingWentWrong(Exception):
 
 class ElasticList(list):
     def _ensure_size(self, ix):
+        if isinstance(ix, slice):
+            ix = ix.stop
+            if ix is None:
+                return
         while len(self) <= ix:
             self.append(0)
     def __getitem__(self, key):
