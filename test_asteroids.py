@@ -12,7 +12,7 @@ import aocasteroids
 ...##""",
     ])
 def test_io(mapstr):
-    am = aocasteroids.AsteroidMap(mapstr)
+    am = aocasteroids.AsteroidMap(mapstr.split('\n'))
     assert str(am) == mapstr
 
 
@@ -74,7 +74,7 @@ def test_io(mapstr):
 ###.##.####.##.#..##""", 11, 13, 210),
     ])
 def test_best_monitor(mapstr, x, y, detects):
-    am = aocasteroids.AsteroidMap(mapstr)
+    am = aocasteroids.AsteroidMap(mapstr.split('\n'))
     best = am.best_monitor()
     assert best.detects == detects
     assert best.x == x

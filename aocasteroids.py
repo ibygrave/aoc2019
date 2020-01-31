@@ -19,7 +19,7 @@ class AsteroidMap(object):
     def __init__(self, mapstr):
         self.asteroids = []
         self.grid = []
-        for y, rowstr in enumerate(mapstr.split('\n')):
+        for y, rowstr in enumerate(mapstr):
             row = []
             for x, cellstr in enumerate(rowstr):
                 if cellstr == '#':
