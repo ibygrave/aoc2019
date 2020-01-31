@@ -1,12 +1,26 @@
-from math import gcd
+from collections import defaultdict
+from math import atan2, gcd
 
 
 class Asteroid:
-    __slots__ = ['x', 'y', 'detects']
+    __slots__ = ['x', 'y', 'detects', 'r']
     def __init__(self, x, y):
         self.x = x
         self.y = y
+        # How many other asteroids detectable from here
         self.detects = 0
+        # Polar-ish coordinates from chosen IMS
+        # delta x = dx * r
+        # delta y = dy * r
+        # dx and dy have no common factors
+    def polar_from_ims(self, ims_x, ims_y):
+        dx = self.x - ims_x
+        dy = self.y - ims_y
+        assert (dx != 0) or (dy != 0)
+        self.r = gcd(dx, dy)
+        dx = dx // self.r
+        dy = dy // self.r
+        return (dx, dy)
 
 
 def pairs(l):
@@ -63,3 +77,22 @@ class AsteroidMap(object):
         self._calc_detects()
         self.asteroids.sort(key = lambda a: a.detects, reverse=True)
         return self.asteroids[0]
+
+    def vaporize(self, ims_x, ims_y):
+        ims = self.grid[ims_y][ims_x]
+        assert ims is not None
+        polar = defaultdict(list)  # direction -> list of asteroids
+        for a in self.asteroids:
+            if a is not ims:
+                polar[a.polar_from_ims(ims_x, ims_y)].append(a)
+        for line in polar.values():
+            line.sort(key=lambda a: a.r)  # nearest first
+        directions = list(polar.keys())
+        directions.sort(key = lambda d: -atan2(d[0], d[1]))  # clockwise from N
+        queues = [polar[d] for d in directions if polar[d]]
+        while queues:
+            aim = queues.pop(0)
+            yield aim.pop(0)
+            if aim:
+                # More asteroids in that direction
+                queues.append(aim)
