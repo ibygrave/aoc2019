@@ -1,3 +1,5 @@
+./aoc_day10_1.py
+329
 ./aoc_day1_1.py
 3361976
 ./aoc_day1_2.py
