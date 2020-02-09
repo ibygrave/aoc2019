@@ -1,6 +1,6 @@
 from collections import defaultdict
 from math import atan2, gcd
-
+from aocutils import pairs
 
 class Asteroid:
     __slots__ = ['x', 'y', 'detects', 'r']
@@ -21,12 +21,6 @@ class Asteroid:
         dx = dx // self.r
         dy = dy // self.r
         return (dx, dy)
-
-
-def pairs(l):
-    for ix, i1 in enumerate(l):
-        for i2 in l[:ix]:
-            yield i1, i2
 
 
 class AsteroidMap(object):
