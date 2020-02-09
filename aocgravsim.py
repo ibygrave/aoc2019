@@ -1,3 +1,4 @@
+from math import gcd
 import re
 from aocutils import pairs, sign
 
@@ -67,3 +68,42 @@ class MoonSim:
 
     def total_energy(self):
         return sum(moon.total_energy() for moon in self.moons)
+
+    def _moon_state(self, attrname):
+        return [getattr(m, attrname) for m in self.moons]
+
+    def repeat_period(self):
+        # As gravity and velocity operations are reversible,
+        # only need to check for return to state at time 0.
+        # If state could repeat without passing through state
+        # at time 0 then universe could run backwards to a
+        # different state, so would not be reversible.
+        # As evolution of x-coordinates are independant or
+        # evolution of other coordinates, then can find
+        # repeat period of each coordinate seperately and
+        # then combine.
+        x0 = self._moon_state('x')
+        dx0 = self._moon_state('dx')
+        y0 = self._moon_state('y')
+        dy0 = self._moon_state('dy')
+        z0 = self._moon_state('z')
+        dz0 = self._moon_state('dz')
+        x_period = None
+        y_period = None
+        z_period = None
+        nsteps = 0
+        while not all([x_period, y_period, z_period]):
+            self.step()
+            nsteps += 1
+            if x_period is None:
+                if self._moon_state('x') == x0 and self._moon_state('dx') == dx0:
+                    x_period = nsteps
+            if y_period is None:
+                if self._moon_state('y') == y0 and self._moon_state('dy') == dy0:
+                    y_period = nsteps
+            if z_period is None:
+                if self._moon_state('z') == z0 and self._moon_state('dz') == dz0:
+                    z_period = nsteps
+        total_period = (x_period * y_period) // gcd(x_period, y_period)
+        total_period = (total_period * z_period) // gcd(total_period, z_period)
+        return total_period

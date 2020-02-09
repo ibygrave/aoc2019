@@ -47,3 +47,10 @@ def test_energy(scan, nsteps, energy):
     ms = aocgravsim.MoonSim(scan.split('\n'))
     ms.step(nsteps=nsteps)
     assert ms.total_energy() == energy
+
+
+@pytest.mark.parametrize("scan, period", [
+    (SCAN1, 2772), (SCAN2, 4686774924) ])
+def test_period(scan, period):
+    ms = aocgravsim.MoonSim(scan.split('\n'))
+    assert ms.repeat_period() == period
