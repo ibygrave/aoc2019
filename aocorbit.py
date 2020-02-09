@@ -5,6 +5,7 @@ class SpaceObject(object):
     def __init__(self):
         self.orbited_by = []
         self.orbits = None
+
     def count_orbits(self, omap):
         if self.orbits is None:
             self.depth = 0
@@ -16,6 +17,7 @@ class SpaceObject(object):
 class OrbitMap(collections.defaultdict):
     def __init__(self):
         super().__init__(SpaceObject)
+
     def input_orbits(self, orbit_iter):
         for orbit_desc in orbit_iter:
             orbited, orbitor = orbit_desc.strip().split(')')
@@ -25,11 +27,14 @@ class OrbitMap(collections.defaultdict):
         self.object_order = ['COM']
         for o in self.object_order:
             self.object_order.extend(self[o].orbited_by[:])
+
     def walk(self):
         for oname in self.object_order:
             yield self[oname]
+
     def count_orbits(self):
         return sum(o.count_orbits(self) for o in self.walk())
+
     def plan_route(self, start, end):
         # plan route via nearest common ancestor in tree of orbits
         # route consists of two parts, up the tree to nca,

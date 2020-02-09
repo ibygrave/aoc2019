@@ -1,12 +1,17 @@
-DLEN=6
+DLEN = 6
+
 
 def to_digits(n, dlen=DLEN):
     d = list(int(i) for i in str(n))
     assert len(d) == dlen
     return d
 
+
 def from_digits(d):
-    return 100000 * d[0] + 10000 * d[1] + 1000 * d[2] + 100 * d[3] + 10 * d[4] + d[5]
+    if not d:
+        return 0
+    return 10 * from_digits(d[:-1]) + d[-1]
+
 
 def incr_nondecr(d, dlen=DLEN):
     for non_max_ix in range(dlen-1, -1, -1):
@@ -19,9 +24,10 @@ def incr_nondecr(d, dlen=DLEN):
     for ix in range(non_max_ix+1, dlen):
         d[ix] = min_d
 
+
 def has_double(d):
-    # unrolled
-    return (d[0] == d[1]) or (d[1] == d[2]) or (d[2] == d[3]) or (d[3] == d[4]) or (d[4] == d[5])
+    return any(fst == nxt for fst, nxt in zip(d[:-1], d[1:]))
+
 
 def has_lonely_double(d):
     m = list(d[ix] == d[ix+1] for ix in range(5))

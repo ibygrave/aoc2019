@@ -1,16 +1,20 @@
 import aocehpr
 
+
 class MockController:
     def __init__(self, moves):
         self.moves = moves
         self.inputs = []
+
     def __iter__(self):
         return self
+
     def __next__(self):
         if self.moves:
             return self.moves.pop(0)
         else:
             raise StopIteration
+
     def set_input(self, i):
         self.inputs.extend(i)
 

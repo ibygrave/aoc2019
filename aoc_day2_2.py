@@ -4,6 +4,7 @@ import aocintcode
 
 want = 19690720
 
+
 def search_params(start_prog, want_out):
     for noun in range(100):
         for verb in range(100):

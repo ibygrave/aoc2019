@@ -1,6 +1,7 @@
 import pytest
 import aocwire
 
+
 @pytest.mark.parametrize("wire1,wire2,closest_cross", [
     (
         "R8,U5,L5,D3",
@@ -23,6 +24,7 @@ def test_closest_cross(wire1, wire2, closest_cross):
     w2 = aocwire.Wire(wire2)
     assert closest_cross == w1.distance_closest_cross(w2)
     assert closest_cross == w2.distance_closest_cross(w1)
+
 
 @pytest.mark.parametrize("wire1,wire2,first_cross", [
     (

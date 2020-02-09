@@ -2,8 +2,10 @@ from collections import defaultdict
 from math import atan2, gcd
 from aocutils import pairs
 
+
 class Asteroid:
     __slots__ = ['x', 'y', 'detects', 'r']
+
     def __init__(self, x, y):
         self.x = x
         self.y = y
@@ -13,6 +15,7 @@ class Asteroid:
         # delta x = dx * r
         # delta y = dy * r
         # dx and dy have no common factors
+
     def polar_from_ims(self, ims_x, ims_y):
         dx = self.x - ims_x
         dy = self.y - ims_y
@@ -42,7 +45,9 @@ class AsteroidMap(object):
         self.maxy = len(self.grid)
 
     def __str__(self):
-        return '\n'.join(''.join(cell and '#' or '.' for cell in row) for row in self.grid)
+        return '\n'.join(
+                ''.join(cell and '#' or '.' for cell in row)
+                for row in self.grid)
 
     def _can_detect(self, a1, a2):
         x, y = a1.x, a1.y
@@ -69,7 +74,7 @@ class AsteroidMap(object):
 
     def best_monitor(self):
         self._calc_detects()
-        self.asteroids.sort(key = lambda a: a.detects, reverse=True)
+        self.asteroids.sort(key=lambda a: a.detects, reverse=True)
         return self.asteroids[0]
 
     def vaporize(self, ims_x, ims_y):
@@ -82,7 +87,7 @@ class AsteroidMap(object):
         for line in polar.values():
             line.sort(key=lambda a: a.r)  # nearest first
         directions = list(polar.keys())
-        directions.sort(key = lambda d: -atan2(d[0], d[1]))  # clockwise from N
+        directions.sort(key=lambda d: -atan2(d[0], d[1]))  # clockwise from N
         queues = [polar[d] for d in directions if polar[d]]
         while queues:
             aim = queues.pop(0)

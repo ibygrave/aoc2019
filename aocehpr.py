@@ -1,4 +1,6 @@
-D = [(0,-1), (1, 0), (0, 1), (-1, 0)]
+D = [(0, -1), (1, 0), (0, 1), (-1, 0)]
+
+
 def move(loc, d):
     x, y = loc
     dx, dy = D[d]
@@ -7,7 +9,7 @@ def move(loc, d):
 
 class Robot:
     def __init__(self, controller):
-        self.loc = (0,0)
+        self.loc = (0, 0)
         self.d = 0
         self.painted = {}
         self.controller = controller
