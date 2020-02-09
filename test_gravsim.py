@@ -25,10 +25,6 @@ STATE2 = [
         (16, -13, 23, 7, 1, 1)]
 
 
-def get_state(moons):
-    return [(m.x, m.y, m.z, m.dx, m.dy, m.dz) for m in moons]
-
-
 @pytest.mark.parametrize("scan, nsteps, state", [
     (SCAN1, 10, STATE1),
     (SCAN2, 100, STATE2),
@@ -36,7 +32,7 @@ def get_state(moons):
 def test_motion(scan, nsteps, state):
     ms = aocgravsim.MoonSim(scan.split('\n'))
     ms.step(nsteps=nsteps)
-    assert get_state(ms.moons) == state
+    assert ms.get_state() == state
 
 
 @pytest.mark.parametrize("scan, nsteps, energy", [
@@ -50,7 +46,7 @@ def test_energy(scan, nsteps, energy):
 
 
 @pytest.mark.parametrize("scan, period", [
-    (SCAN1, 2772), (SCAN2, 4686774924) ])
+    (SCAN1, 2772), (SCAN2, 4686774924)])
 def test_period(scan, period):
     ms = aocgravsim.MoonSim(scan.split('\n'))
     assert ms.repeat_period() == period
