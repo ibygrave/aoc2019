@@ -24,7 +24,7 @@ class ElasticList(list):
         super().__setitem__(key, value)
 
 
-class Program(object):
+class Program:
     def __init__(self, init, clone=None):
         if clone is not None:
             self.mem = clone.mem[:]
@@ -75,79 +75,61 @@ class Program(object):
         else:
             raise SomethingWentWrong(f"unknown parameter mode {mode}")
 
-    def binary_math_op(self, fn):
-        in1 = self.get_param(1)
-        in2 = self.get_param(2)
-        self.put_param(3, fn(in1, in2))
-        self.next_pc = self.pc + 4  # 1 opcode, 3 params
-
-    def do_opcode_99(self):
-        self.running = False
-
-    def do_opcode_01(self):
-        self.binary_math_op(lambda x, y: x+y)
-
-    def do_opcode_02(self):
-        self.binary_math_op(lambda x, y: x*y)
-
-    def do_opcode_03(self):
-        in_val = self.input_fn()
-        self.put_param(1, in_val)
-        self.next_pc = self.pc + 2  # 1 opcode, 1 param
-
-    def do_opcode_04(self):
-        self.next_out = self.get_param(1)
-        self.next_pc = self.pc + 2  # 1 opcode, 1 param
-
-    def do_opcode_05(self):
-        """jump-if-true"""
-        if self.get_param(1) != 0:
-            self.next_pc = self.get_param(2)
-        else:
-            self.next_pc = self.pc + 3  # 1 opcode, 2 params
-
-    def do_opcode_06(self):
-        """jump-if-false"""
-        if self.get_param(1) == 0:
-            self.next_pc = self.get_param(2)
-        else:
-            self.next_pc = self.pc + 3  # 1 opcode, 2 params
-
-    def do_opcode_07(self):
-        """less than"""
-        if self.get_param(1) < self.get_param(2):
-            self.put_param(3, 1)
-        else:
-            self.put_param(3, 0)
-        self.next_pc = self.pc + 4  # 1 opcode, 3 params
-
-    def do_opcode_08(self):
-        """equals"""
-        if self.get_param(1) == self.get_param(2):
-            self.put_param(3, 1)
-        else:
-            self.put_param(3, 0)
-        self.next_pc = self.pc + 4  # 1 opcode, 3 params
-
-    def do_opcode_09(self):
-        """adjusts the relative base"""
-        self.next_rbase = self.rbase + self.get_param(1)
-        self.next_pc = self.pc + 2  # 1 opcode, 1 param
-
     def step(self):
-        self.next_pc = None
-        self.next_rbase = self.rbase
-        try:
-            instr = self.mem[self.pc]
-            instr = f"{instr:02}"
-            opcode = instr[-2:]
-            self.param_modes = list(int(m) for m in instr[:-2])[::-1]
-            do_opcode = getattr(self, f"do_opcode_{opcode}")
-        except (IndexError, AttributeError) as err:
-            raise SomethingWentWrong() from err
-        do_opcode()
-        self.pc = self.next_pc
-        self.rbase = self.next_rbase
+        next_pc = self.pc
+        next_rbase = self.rbase
+        instr = self.mem[self.pc]
+        modes, opcode = divmod(instr, 100)
+        param_modes = []
+        while modes:
+            modes, mode = divmod(modes, 10)
+            param_modes.append(mode)
+        self.param_modes = param_modes
+        if opcode == 1:
+            self.put_param(3, self.get_param(1) + self.get_param(2))
+            next_pc += 4  # 1 opcode, 3 params
+        elif opcode == 2:
+            self.put_param(3, self.get_param(1) * self.get_param(2))
+            next_pc += 4  # 1 opcode, 3 params
+        elif opcode == 3:
+            in_val = self.input_fn()
+            self.put_param(1, in_val)
+            next_pc += 2  # 1 opcode, 1 param
+        elif opcode == 4:
+            self.next_out = self.get_param(1)
+            next_pc += 2  # 1 opcode, 1 param
+        elif opcode == 5:
+            if self.get_param(1) != 0:
+                next_pc = self.get_param(2)
+            else:
+                next_pc += 3  # 1 opcode, 2 params
+        elif opcode == 6:
+            if self.get_param(1) == 0:
+                next_pc = self.get_param(2)
+            else:
+                next_pc += 3  # 1 opcode, 2 params
+        elif opcode == 7:
+            if self.get_param(1) < self.get_param(2):
+                self.put_param(3, 1)
+            else:
+                self.put_param(3, 0)
+            next_pc += 4  # 1 opcode, 3 params
+        elif opcode == 8:
+            if self.get_param(1) == self.get_param(2):
+                self.put_param(3, 1)
+            else:
+                self.put_param(3, 0)
+            next_pc += 4  # 1 opcode, 3 params
+        elif opcode == 9:
+            """adjusts the relative base"""
+            next_rbase += self.get_param(1)
+            next_pc += 2  # 1 opcode, 1 param
+        elif opcode == 99:
+            self.running = False
+        else:
+            raise SomethingWentWrong()
+        self.pc = next_pc
+        self.rbase = next_rbase
 
     def __str__(self):
         return ','.join(str(x) for x in self.mem)
