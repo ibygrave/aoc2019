@@ -34,6 +34,10 @@ class Program(object):
         self.rbase = 0
         self.running = True
         self.inputs = []
+        self.input_fn = self.get_input
+
+    def get_input(self):
+        return self.inputs.pop(0)
 
     def param_mode(self, param_ix):
         if param_ix > len(self.param_modes):
@@ -87,7 +91,7 @@ class Program(object):
         self.binary_math_op(lambda x, y: x*y)
 
     def do_opcode_03(self):
-        in_val = self.inputs.pop(0)
+        in_val = self.input_fn()
         self.put_param(1, in_val)
         self.next_pc = self.pc + 2  # 1 opcode, 1 param
 
@@ -150,6 +154,9 @@ class Program(object):
 
     def set_input(self, inputs):
         self.inputs.extend(inputs)
+
+    def set_input_fn(self, input_fn):
+        self.input_fn = input_fn
 
     def __iter__(self):
         return self
