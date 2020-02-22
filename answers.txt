@@ -25,6 +25,8 @@
 12535
 ./aoc_day14_1.py
 431448
+./aoc_day14_2.py
+3279311
 ./aoc_day2_1.py
 3224742
 ./aoc_day2_2.py

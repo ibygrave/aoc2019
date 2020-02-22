@@ -74,3 +74,26 @@ class Factory:
                     self.chem_amounts = list(map(
                         lambda x: x[0] + mul*x[1],
                         zip(self.chem_amounts, reaction)))
+
+
+def fuel_given_ore(factory, ore_budget, first_step=1000):
+    # first guess
+    factory['FUEL'] = -first_step
+    factory.reduce()
+    first_fuel_costs = -factory['ORE']
+    est_fuel_cost = (first_step * ore_budget) // first_fuel_costs
+    one_fuel_costs = first_fuel_costs // first_step
+    # make up fuel to estimated max given budget
+    factory['FUEL'] -= (est_fuel_cost - first_step)
+    factory.reduce()
+    fuel_got = est_fuel_cost
+    # keep making more fuel until budget reached
+    while (-factory['ORE']) < ore_budget:
+        more_fuel = max(1, one_fuel_costs // (ore_budget + factory['ORE']))
+        factory['FUEL'] -= more_fuel
+        factory.reduce()
+        fuel_got += more_fuel
+    else:
+        # Last one went over budget
+        fuel_got -= more_fuel
+    return fuel_got
