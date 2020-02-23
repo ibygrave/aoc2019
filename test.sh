@@ -1,8 +1,9 @@
 #!/bin/bash
 set -ex
 
-pytest-3
+. .testenv/bin/activate
+pytest
 
-for q in ./aoc_day*.py; do echo $q; $q; done > answers.txt
+for q in ./aoc_day*.py; do echo $q; python $q; done > answers.txt
 
 echo DONE
