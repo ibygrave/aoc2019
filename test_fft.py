@@ -12,3 +12,12 @@ import aocfft
     ])
 def test_fft(signal, phases, output):
     assert aocfft.fft(signal, phases).startswith(output)
+
+
+@pytest.mark.parametrize("signal, message", [
+    ("03036732577212944063491565474664", "84462026"),
+    ("02935109699940807407585447034323", "78725270"),
+    ("03081770884921959731165446850517", "53553731"),
+    ])
+def test_fft_offset(signal, message):
+    assert aocfft.fft_offset(signal).startswith(message)

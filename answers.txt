@@ -32,6 +32,7 @@
 furthest: 364
 ./aoc_day16.py
 28430146
+12064286
 ./aoc_day2_1.py
 3224742
 ./aoc_day2_2.py
