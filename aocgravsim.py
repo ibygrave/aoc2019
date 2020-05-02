@@ -3,7 +3,7 @@ import re
 from aocutils import pairs, sign
 
 
-MOON_RE = re.compile("<x=(?P<x>-?\d+), y=(?P<y>-?\d+), z=(?P<z>-?\d+)>")
+MOON_RE = re.compile(r'<x=(?P<x>-?\d+), y=(?P<y>-?\d+), z=(?P<z>-?\d+)>')
 
 
 class Coord:
