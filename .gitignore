@@ -7,3 +7,4 @@ data/answers.txt.new
 *.egg-info/
 build/
 dist/
+.tox/
