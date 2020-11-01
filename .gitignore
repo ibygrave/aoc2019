@@ -3,4 +3,7 @@
 .cache
 __pycache__
 .testenv
-answers.txt.new
+data/answers.txt.new
+*.egg-info/
+build/
+dist/
