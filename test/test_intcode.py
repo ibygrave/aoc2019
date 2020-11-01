@@ -1,5 +1,5 @@
 import pytest
-from aoc2019 import aocintcode
+from aoc2019 import intcode
 
 
 @pytest.mark.parametrize("program,out", [
@@ -25,7 +25,7 @@ from aoc2019 import aocintcode
     ("1101,100,-1,4,0", "1101,100,-1,4,99"),
     ])
 def test_program_a(program, out):
-    prog = aocintcode.Program(program)
+    prog = intcode.Program(program)
     assert program == str(prog)
     assert [] == list(prog)
     assert out == str(prog)
@@ -62,7 +62,7 @@ def test_program_a(program, out):
     ("104,1125899906842624,99", [], [1125899906842624]),
     ])
 def test_program_b(program, in_data, out_data):
-    prog = aocintcode.Program(program)
+    prog = intcode.Program(program)
     prog.set_input(in_data)
     assert program == str(prog)
     prog_out_data = list(prog)
@@ -71,20 +71,20 @@ def test_program_b(program, in_data, out_data):
 
 AMP_CONTROL_TESTS = [
     ("3,15,3,16,1002,16,10,16,1,16,15,15,4,15,99,0,0",
-     [4, 3, 2, 1, 0], 43210, aocintcode.control_amps),
+     [4, 3, 2, 1, 0], 43210, intcode.control_amps),
     ("3,23,3,24,1002,24,10,24,1002,23,-1,23,101,5,23,"
      "23,1,24,23,23,4,23,99,0,0",
-     [0, 1, 2, 3, 4], 54321, aocintcode.control_amps),
+     [0, 1, 2, 3, 4], 54321, intcode.control_amps),
     ("3,31,3,32,1002,32,10,32,1001,31,-2,31,1007,31,0,33,1002,33,7,33,"
      "1,33,31,31,1,32,31,31,4,31,99,0,0,0",
-     [1, 0, 4, 3, 2], 65210, aocintcode.control_amps),
+     [1, 0, 4, 3, 2], 65210, intcode.control_amps),
     ("3,26,1001,26,-4,26,3,27,1002,27,2,27,1,27,26,27,4,27,1001,28,-1,"
      "28,1005,28,6,99,0,0,5",
-     [9, 8, 7, 6, 5], 139629729, aocintcode.feedback_control_amps),
+     [9, 8, 7, 6, 5], 139629729, intcode.feedback_control_amps),
     ("3,52,1001,52,-5,52,3,53,1,52,56,54,1007,54,5,55,1005,55,26,1001,"
      "54,-5,54,1105,1,12,1,53,54,53,1008,54,0,55,1001,55,1,55,2,53,55,"
      "53,4,53,1001,56,-1,56,1005,56,6,99,0,0,0,0,10",
-     [9, 7, 8, 5, 6], 18216, aocintcode.feedback_control_amps),
+     [9, 7, 8, 5, 6], 18216, intcode.feedback_control_amps),
     ]
 
 
@@ -99,6 +99,6 @@ def test_control_amps(program, phases, signal_out, control_fn):
 def test_optimize_amps(program, phases, signal_out, control_fn):
     phases_in = phases[:]
     phases_in.sort()
-    best_amp_control = aocintcode.optimize_amps(program, phases_in, control_fn)
+    best_amp_control = intcode.optimize_amps(program, phases_in, control_fn)
     assert signal_out == best_amp_control.signal
     assert phases == best_amp_control.phases

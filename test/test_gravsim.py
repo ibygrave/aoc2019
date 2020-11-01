@@ -1,5 +1,5 @@
 import pytest
-from aoc2019 import aocgravsim
+from aoc2019 import gravsim
 
 
 SCAN1 = """<x=-1, y=0, z=2>
@@ -30,7 +30,7 @@ STATE2 = [
     (SCAN2, 100, STATE2),
     ])
 def test_motion(scan, nsteps, state):
-    ms = aocgravsim.MoonSim(scan.split('\n'))
+    ms = gravsim.MoonSim(scan.split('\n'))
     ms.step(nsteps=nsteps)
     assert ms.get_state() == state
 
@@ -40,7 +40,7 @@ def test_motion(scan, nsteps, state):
     (SCAN2, 100, 1940),
     ])
 def test_energy(scan, nsteps, energy):
-    ms = aocgravsim.MoonSim(scan.split('\n'))
+    ms = gravsim.MoonSim(scan.split('\n'))
     ms.step(nsteps=nsteps)
     assert ms.total_energy() == energy
 
@@ -48,5 +48,5 @@ def test_energy(scan, nsteps, energy):
 @pytest.mark.parametrize("scan, period", [
     (SCAN1, 2772), (SCAN2, 4686774924)])
 def test_period(scan, period):
-    ms = aocgravsim.MoonSim(scan.split('\n'))
+    ms = gravsim.MoonSim(scan.split('\n'))
     assert ms.repeat_period() == period

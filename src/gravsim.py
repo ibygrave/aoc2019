@@ -1,7 +1,7 @@
 from math import gcd
 import re
 import sys
-from .aocutils import pairs, sign
+from .utils import pairs, sign
 
 
 MOON_RE = re.compile(r'<x=(?P<x>-?\d+), y=(?P<y>-?\d+), z=(?P<z>-?\d+)>')

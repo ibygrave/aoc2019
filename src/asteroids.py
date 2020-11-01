@@ -1,7 +1,7 @@
 from collections import defaultdict
 from math import atan2, gcd
 import sys
-from .aocutils import pairs
+from .utils import pairs
 
 
 class Asteroid:

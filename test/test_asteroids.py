@@ -1,5 +1,5 @@
 import pytest
-from aoc2019 import aocasteroids
+from aoc2019 import asteroids
 
 
 @pytest.mark.parametrize("mapstr", [
@@ -12,7 +12,7 @@ from aoc2019 import aocasteroids
 ...##""",
     ])
 def test_io(mapstr):
-    am = aocasteroids.AsteroidMap(mapstr.split('\n'))
+    am = asteroids.AsteroidMap(mapstr.split('\n'))
     assert str(am) == mapstr
 
 
@@ -74,7 +74,7 @@ def test_io(mapstr):
 ###.##.####.##.#..##""", 11, 13, 210),
     ])
 def test_best_monitor(mapstr, x, y, detects):
-    am = aocasteroids.AsteroidMap(mapstr.split('\n'))
+    am = asteroids.AsteroidMap(mapstr.split('\n'))
     best = am.best_monitor()
     assert best.detects == detects
     assert best.x == x
@@ -123,7 +123,7 @@ def test_best_monitor(mapstr, x, y, detects):
     ])
 ])
 def test_vaporize(mapstr, ims_x, ims_y, vaporized):
-    am = aocasteroids.AsteroidMap(mapstr.split('\n'))
+    am = asteroids.AsteroidMap(mapstr.split('\n'))
     got_vaporized = list(am.vaporize(ims_x, ims_y))
     for v_ix, ax, ay in vaporized:
         assert v_ix <= len(got_vaporized)

@@ -1,5 +1,5 @@
 import sys
-from . import aocintcode
+from . import intcode
 
 COMPASS = "!NSWE"
 DIR = [
@@ -113,7 +113,7 @@ def search(sense_control, stop_at_oxygen):
 
 
 def day15():
-    prog = aocintcode.input_program(sys.argv[1])
+    prog = intcode.input_program(sys.argv[1])
     search(sense_control=prog, stop_at_oxygen=True)
     # search again, starting from the oxygen system
     search(sense_control=prog, stop_at_oxygen=False)

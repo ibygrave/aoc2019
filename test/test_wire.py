@@ -1,5 +1,5 @@
 import pytest
-from aoc2019 import aocwire
+from aoc2019 import wire
 
 
 @pytest.mark.parametrize("wire1,wire2,closest_cross", [
@@ -20,8 +20,8 @@ from aoc2019 import aocwire
     ),
     ])
 def test_closest_cross(wire1, wire2, closest_cross):
-    w1 = aocwire.Wire(wire1)
-    w2 = aocwire.Wire(wire2)
+    w1 = wire.Wire(wire1)
+    w2 = wire.Wire(wire2)
     assert closest_cross == w1.distance_closest_cross(w2)
     assert closest_cross == w2.distance_closest_cross(w1)
 
@@ -44,7 +44,7 @@ def test_closest_cross(wire1, wire2, closest_cross):
     ),
     ])
 def test_first_cross(wire1, wire2, first_cross):
-    w1 = aocwire.Wire(wire1)
-    w2 = aocwire.Wire(wire2)
+    w1 = wire.Wire(wire1)
+    w2 = wire.Wire(wire2)
     assert first_cross == w1.steps_first_cross(w2)
     assert first_cross == w2.steps_first_cross(w1)

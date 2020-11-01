@@ -1,5 +1,5 @@
 import pytest
-from aoc2019 import aocchem
+from aoc2019 import chem
 
 
 R1 = [
@@ -70,7 +70,7 @@ R5 = [
     (R5, 2210736),
     ])
 def test_stoichiometry(reactions, need_ore):
-    factory = aocchem.Factory(reactions)
+    factory = chem.Factory(reactions)
     factory['FUEL'] = -1
     factory.reduce()
     assert factory['ORE'] == -need_ore
@@ -83,5 +83,5 @@ def test_stoichiometry(reactions, need_ore):
     ])
 def test_budget(reactions, get_fuel):
     TRILLION = 1000000000000
-    factory = aocchem.Factory(reactions)
-    assert aocchem.fuel_given_ore(factory, ore_budget=TRILLION)
+    factory = chem.Factory(reactions)
+    assert chem.fuel_given_ore(factory, ore_budget=TRILLION)

@@ -1,4 +1,4 @@
-from aoc2019 import aocehpr
+from aoc2019 import ehpr
 
 
 class MockController:
@@ -21,7 +21,7 @@ class MockController:
 
 def test_paint():
     c = MockController([1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0])
-    r = aocehpr.Robot(c)
+    r = ehpr.Robot(c)
     r.run()
     assert str(r) == "  #\n..#\n## "
     assert c.inputs == [0, 0, 0, 0, 1, 0, 0, 0]

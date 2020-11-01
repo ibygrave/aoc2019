@@ -1,5 +1,5 @@
 import sys
-from . import aocintcode
+from . import intcode
 
 D = [(0, -1), (1, 0), (0, 1), (-1, 0)]
 
@@ -62,13 +62,13 @@ class Robot:
 def day11():
     # Part 1
     print("part 1")
-    prog = aocintcode.input_program(sys.argv[1])
+    prog = intcode.input_program(sys.argv[1])
     ehpr = Robot(prog)
     ehpr.run()
     print(ehpr.count_painted())
     # Part 2
     print("part 2")
-    prog = aocintcode.input_program(sys.argv[1])
+    prog = intcode.input_program(sys.argv[1])
     ehpr = Robot(prog)
     ehpr.painted[(0, 0)] = 1
     ehpr.run()
