@@ -1,5 +1,6 @@
 from collections import namedtuple
 import itertools
+import sys
 
 
 class SomethingWentWrong(Exception):
@@ -196,3 +197,74 @@ def optimize_amps(prog, phases, control_fn):
         if best is None or signal > best.signal:
             best = AmpControl(signal, list(phases_perm))
     return best
+
+
+def input_program(input_name, prog_type=Program):
+    with open(input_name) as input_file:
+        return prog_type(input_file.readline())
+
+
+def search_params(start_prog, want_out):
+    for noun in range(100):
+        for verb in range(100):
+            experiment = Program("", clone=start_prog)
+            experiment.mem[1] = noun
+            experiment.mem[2] = verb
+            try:
+                list(experiment)
+            except SomethingWentWrong as err:
+                continue
+            if experiment.mem[0] == want_out:
+                return f"Found noun = {noun}, verb = {verb}"
+
+
+def day2():
+    # Part 1
+    prog = input_program(sys.argv[1])
+    prog.mem[1] = 12
+    prog.mem[2] = 2
+    list(prog)
+    print("part 1")
+    print(prog.mem[0])
+    # Part 2
+    want = 19690720
+    start_prog = input_program(sys.argv[1])
+    print("part 2")
+    print(search_params(start_prog, want))
+
+
+def day5():
+    # Part 1
+    print("part 1")
+    prog = input_program(sys.argv[1])
+    print(run_test_program(prog))
+    # Part 2
+    print("part 2")
+    prog = input_program(sys.argv[1])
+    print(run_test_program(prog, system_ids=[5]))
+
+
+def day7():
+    # Part 1
+    print("part 1")
+    with open(sys.argv[1]) as input_file:
+        prog = input_file.readline()
+    phases = [0, 1, 2, 3, 4]
+    print(optimize_amps(prog, phases, control_amps))
+    # Part 2
+    print("part 2")
+    with open(sys.argv[1]) as input_file:
+        prog = input_file.readline()
+    phases = [5, 6, 7, 8, 9]
+    print(optimize_amps(prog, phases, feedback_control_amps))
+
+
+def day9():
+    # Part 1
+    print("part 1")
+    prog = input_program(sys.argv[1])
+    print(run_test_program(prog))
+    # Part 2
+    print("part 2")
+    prog = input_program(sys.argv[1])
+    print(run_test_program(prog, system_ids=[2]))

@@ -1,4 +1,6 @@
 from collections import namedtuple
+import sys
+from . import aocintcode
 
 Tile = namedtuple('Tile', ['x', 'y', 'id'])
 Bat = namedtuple('Bat', ['x', 'y'])
@@ -78,3 +80,18 @@ class Game:
                 if self.field[y][x] == block_id:
                     count += 1
         return count
+
+
+def day13():
+    # Part 1
+    print("part 1")
+    prog = aocintcode.input_program(sys.argv[1])
+    game = Game(prog)
+    game.run()
+    print(game.count_blocks(2))
+    # Part 2
+    print("part 2")
+    prog = aocintcode.input_program(sys.argv[1])
+    game = Game(prog, freeplay=True)
+    game.run()
+    print(game.score)

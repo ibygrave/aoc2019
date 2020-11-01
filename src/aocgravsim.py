@@ -1,5 +1,6 @@
 from math import gcd
 import re
+import sys
 from .aocutils import pairs, sign
 
 
@@ -86,3 +87,17 @@ class MoonSim:
                 nsteps += 1
             period *= nsteps // gcd(nsteps, period)
         return period
+
+
+def day12():
+    # Part 1
+    print("part 1")
+    with open(sys.argv[1]) as input_file:
+        ms = MoonSim(input_file)
+    ms.step(nsteps=1000)
+    print(ms.total_energy())
+    # Part 2
+    print("part 2")
+    with open(sys.argv[1]) as input_file:
+        ms = MoonSim(input_file)
+    print(ms.repeat_period())

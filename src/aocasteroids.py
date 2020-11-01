@@ -1,5 +1,6 @@
 from collections import defaultdict
 from math import atan2, gcd
+import sys
 from .aocutils import pairs
 
 
@@ -95,3 +96,19 @@ class AsteroidMap(object):
             if aim:
                 # More asteroids in that direction
                 queues.append(aim)
+
+
+def day10():
+    # Part 1
+    print("part 1")
+    with open(sys.argv[1]) as input_file:
+        am = AsteroidMap(input_file)
+    ims = am.best_monitor()
+    print(ims.detects)
+    # Part 2
+    print("part 2")
+    v = am.vaporize(ims.x, ims.y)
+    for _ in range(199):
+        next(v)
+    cc = next(v)  # 200th
+    print(100 * cc.x + cc.y)

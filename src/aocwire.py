@@ -1,4 +1,5 @@
 from collections import namedtuple
+import sys
 
 Point = namedtuple('Point', ['x', 'y', 'steps'])
 
@@ -110,3 +111,15 @@ class Wire(object):
             if first_s is None or p.steps < first_s:
                 first_s = p.steps
         return first_s
+
+
+def day3():
+    # Part 1
+    print("part 1")
+    with open(sys.argv[1]) as input_file:
+        w1 = Wire(input_file.readline())
+        w2 = Wire(input_file.readline())
+    print(w1.distance_closest_cross(w2))
+    # Part 2
+    print("part 2")
+    print(w1.steps_first_cross(w2))

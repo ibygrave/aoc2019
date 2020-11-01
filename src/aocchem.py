@@ -1,5 +1,6 @@
 import functools
 import re
+import sys
 
 CHEM_RE = re.compile(r'\s*(\d+)\s+([A-Z]+)\s*')
 
@@ -97,3 +98,18 @@ def fuel_given_ore(factory, ore_budget, first_step=1000):
         # Last one went over budget
         fuel_got -= more_fuel
     return fuel_got
+
+
+def day14():
+    # Part 1
+    print("part 1")
+    with open(sys.argv[1]) as input_file:
+        factory = Factory(input_file)
+    factory['FUEL'] = -1
+    factory.reduce()
+    print(-factory['ORE'])
+    # Part 2
+    print("part 2")
+    with open(sys.argv[1]) as input_file:
+        factory = Factory(input_file)
+    print(fuel_given_ore(factory, ore_budget=1000000000000))

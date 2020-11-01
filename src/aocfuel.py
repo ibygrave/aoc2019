@@ -1,4 +1,6 @@
 """AOC2019 fuel"""
+import sys
+from . import aocutils
 
 
 def fuel_by_mass(mass):
@@ -24,3 +26,16 @@ def rocket_fuel(module_mass):
 
 def total_rocket_fuel_by_module_mass(masses):
     return sum(rocket_fuel(mass) for mass in masses)
+
+
+def day1():
+    # Part 1
+    masses = aocutils.input_ints(sys.argv[1])
+    fuel = total_fuel_by_module_mass(masses)
+    print("part 1")
+    print(fuel)
+    # Part 2
+    masses = aocutils.input_ints(sys.argv[1])
+    fuel = total_rocket_fuel_by_module_mass(masses)
+    print("part 2")
+    print(fuel)

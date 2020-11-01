@@ -1,3 +1,4 @@
+import sys
 import numpy
 
 
@@ -44,3 +45,15 @@ class Image(object):
             if layer[layer_ix] == 2:
                 continue
             return layer[layer_ix]
+
+
+def day8():
+    # Part 1
+    print("part 1")
+    i = Image(25, 6)
+    with open(sys.argv[1]) as input_file:
+        i.input(input_file.readline().strip())
+    print(i.elf_check())
+    # Part 2
+    print("part 2")
+    print(i)

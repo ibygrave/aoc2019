@@ -1,4 +1,5 @@
 import collections
+import sys
 
 
 class SpaceObject(object):
@@ -64,3 +65,17 @@ def count_orbits(orbit_iter):
     omap = OrbitMap()
     omap.input_orbits(orbit_iter)
     return omap.count_orbits()
+
+
+def day6():
+    # Part 1
+    print("part 1")
+    with open(sys.argv[1]) as input_file:
+        print(count_orbits(input_file))
+    # Part 2
+    print("part 2")
+    omap = OrbitMap()
+    with open(sys.argv[1]) as input_file:
+        omap.input_orbits(input_file)
+    omap.count_orbits()
+    print(len(omap.plan_route("YOU", "SAN"))-1)

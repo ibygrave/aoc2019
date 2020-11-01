@@ -1,3 +1,5 @@
+import sys
+
 DLEN = 6
 
 
@@ -42,3 +44,22 @@ def has_lonely_double(d):
     if m[4] and not m[3]:
         return True
     return False
+
+def count_valid_passwords(first, last, p_valid):
+    d = to_digits(first)
+    count = 0
+    while from_digits(d) <= last:
+        if p_valid(d):
+            count += 1
+        incr_nondecr(d)
+    return count
+
+
+def day4():
+    # Input: 240920-789857
+    # Part 1
+    print("part 1")
+    print(count_valid_passwords(244444, 789857, has_double))
+    # Part 2
+    print("part 2")
+    print(count_valid_passwords(244444, 789857, has_lonely_double))

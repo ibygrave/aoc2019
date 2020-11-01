@@ -1,4 +1,5 @@
 from itertools import count, islice
+import sys
 import numpy
 import numpy.linalg
 
@@ -63,3 +64,10 @@ def fft_offset(signal, phases=100, signal_reps=10000, message_len=8):
                 message[m_ix] += (p % 10) * digits[m_ix + p_ix]
                 message[m_ix] %= 10
     return ''.join(map(str, message))
+
+
+def day16():
+    with open(sys.argv[1]) as input_file:
+        signal = input_file.read().strip()
+    print(fft(signal, 100)[:8])
+    print(fft_offset(signal)[:8])
