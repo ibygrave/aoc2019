@@ -45,6 +45,7 @@ def has_lonely_double(d):
         return True
     return False
 
+
 def count_valid_passwords(first, last, p_valid):
     d = to_digits(first)
     count = 0

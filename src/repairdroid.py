@@ -37,11 +37,11 @@ class Droid:
             self.x, self.y = next_loc
 
     def __str__(self):
-        xmin = min(l[0] for l in self.found.keys())
-        xmax = max(l[0] for l in self.found.keys())
+        xmin = min(loc[0] for loc in self.found.keys())
+        xmax = max(loc[0] for loc in self.found.keys())
         xspan = 1 + xmax - xmin
-        ymin = min(l[1] for l in self.found.keys())
-        ymax = max(l[1] for l in self.found.keys())
+        ymin = min(loc[1] for loc in self.found.keys())
+        ymax = max(loc[1] for loc in self.found.keys())
         yspan = 1 + ymax - ymin
         rows = [[' ' for _ in range(xspan)] for _ in range(yspan)]
         for x, y in self.found.keys():

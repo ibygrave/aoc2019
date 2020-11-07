@@ -4,10 +4,10 @@ def input_ints(input_name):
             yield int(input_line.strip())
 
 
-def pairs(l):
-    for ix, i1 in enumerate(l):
-        for i2 in l[:ix]:
-            yield i1, i2
+def pairs(items):
+    for ix, item1 in enumerate(items):
+        for item2 in items[:ix]:
+            yield item1, item2
 
 
 def sign(a):

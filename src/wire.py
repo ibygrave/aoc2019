@@ -48,25 +48,25 @@ class WireReader(object):
         self.wire.append(v)
         self.v.append(v)
 
-    def go_R(self, l):
-        self.go_h(Horiz(self.y, self.x, self.x+l, self.steps, self.steps+l))
-        self.x += l
-        self.steps += l
+    def go_R(self, d):
+        self.go_h(Horiz(self.y, self.x, self.x+d, self.steps, self.steps+d))
+        self.x += d
+        self.steps += d
 
-    def go_L(self, l):
-        self.go_h(Horiz(self.y, self.x-l, self.x, self.steps+l, self.steps))
-        self.x -= l
-        self.steps += l
+    def go_L(self, d):
+        self.go_h(Horiz(self.y, self.x-d, self.x, self.steps+d, self.steps))
+        self.x -= d
+        self.steps += d
 
-    def go_U(self, l):
-        self.go_v(Vert(self.x, self.y, self.y+l, self.steps, self.steps+l))
-        self.y += l
-        self.steps += l
+    def go_U(self, d):
+        self.go_v(Vert(self.x, self.y, self.y+d, self.steps, self.steps+d))
+        self.y += d
+        self.steps += d
 
-    def go_D(self, l):
-        self.go_v(Vert(self.x, self.y-l, self.y, self.steps+l, self.steps))
-        self.y -= l
-        self.steps += l
+    def go_D(self, d):
+        self.go_v(Vert(self.x, self.y-d, self.y, self.steps+d, self.steps))
+        self.y -= d
+        self.steps += d
 
     def read(self, text):
         for seg in text.strip().split(','):

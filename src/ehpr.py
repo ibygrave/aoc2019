@@ -44,8 +44,8 @@ class Robot:
 
     def __str__(self):
         painted_locs = self.painted.keys()
-        xs = [l[0] for l in painted_locs]
-        ys = [l[1] for l in painted_locs]
+        xs = [loc[0] for loc in painted_locs]
+        ys = [loc[1] for loc in painted_locs]
         xmin = min(xs)
         xmax = max(xs)
         ymin = min(ys)
