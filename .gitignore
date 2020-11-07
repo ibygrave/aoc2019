@@ -1,10 +1,5 @@
 *~
 *swp
-.cache
 __pycache__
-.testenv
-data/answers.txt.new
 *.egg-info/
-build/
-dist/
 .tox/
