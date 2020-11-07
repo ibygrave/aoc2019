@@ -1,3 +1,7 @@
+"""Repair Droid"""
+# pylint: disable=invalid-name
+# pylint: disable=missing-function-docstring
+# pylint: disable=missing-class-docstring
 import sys
 from . import intcode
 
@@ -37,14 +41,14 @@ class Droid:
             self.x, self.y = next_loc
 
     def __str__(self):
-        xmin = min(loc[0] for loc in self.found.keys())
-        xmax = max(loc[0] for loc in self.found.keys())
+        xmin = min(loc[0] for loc in self.found)
+        xmax = max(loc[0] for loc in self.found)
         xspan = 1 + xmax - xmin
-        ymin = min(loc[1] for loc in self.found.keys())
-        ymax = max(loc[1] for loc in self.found.keys())
+        ymin = min(loc[1] for loc in self.found)
+        ymax = max(loc[1] for loc in self.found)
         yspan = 1 + ymax - ymin
         rows = [[' ' for _ in range(xspan)] for _ in range(yspan)]
-        for x, y in self.found.keys():
+        for x, y in self.found:
             rows[y - ymin][x - xmin] = ".#O"[self.found[(x, y)]]
         rows[self.y - ymin][self.x - xmin] = 'd'
         return '\n'.join(''.join(row) for row in rows) + '\n---\n'
@@ -54,6 +58,7 @@ DEADEND = object()  # sentinel
 
 
 class SearchTree:
+    # pylint: disable=too-few-public-methods
     __slots__ = ['x', 'y', 'dirs', 'back', 'depth']
 
     def __init__(self, loc, back):
@@ -75,15 +80,14 @@ class SearchTree:
                 else:
                     self.dirs[move] = SearchTree(move_loc, self)
                     return (move + 1), self.dirs[move]
-        else:
-            if self.back is None:
-                raise StopIteration
-            for move, dloc in enumerate(DIR):
-                dx, dy = dloc
-                if (self.back.x == (self.x + dx)) \
-                   and (self.back.y == (self.y + dy)):
-                    return move, self.back
-            assert False, "couldn't go back"
+        if self.back is None:
+            raise StopIteration
+        for move, dloc in enumerate(DIR):
+            dx, dy = dloc
+            if (self.back.x == (self.x + dx)) \
+               and (self.back.y == (self.y + dy)):
+                return move, self.back
+        raise AssertionError("couldn't go back")
 
 
 def search(sense_control, stop_at_oxygen):

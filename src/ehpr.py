@@ -1,3 +1,7 @@
+"""Emergency Hull Painting Robot"""
+# pylint: disable=invalid-name
+# pylint: disable=missing-function-docstring
+# pylint: disable=missing-class-docstring
 import sys
 from . import intcode
 
@@ -39,8 +43,7 @@ class Robot:
     def _ch(self, loc):
         if loc in self.painted.keys():
             return ".#"[self.painted[loc]]
-        else:
-            return ' '
+        return ' '
 
     def __str__(self):
         painted_locs = self.painted.keys()

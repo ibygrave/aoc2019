@@ -1,11 +1,17 @@
+"""Universal Orbit Map"""
+# pylint: disable=invalid-name
+# pylint: disable=missing-function-docstring
+# pylint: disable=missing-class-docstring
 import collections
 import sys
 
 
-class SpaceObject(object):
+class SpaceObject:
+    # pylint: disable=too-few-public-methods
     def __init__(self):
         self.orbited_by = []
         self.orbits = None
+        self.depth = None
 
     def count_orbits(self, omap):
         if self.orbits is None:
@@ -18,6 +24,7 @@ class SpaceObject(object):
 class OrbitMap(collections.defaultdict):
     def __init__(self):
         super().__init__(SpaceObject)
+        self.object_order = []
 
     def input_orbits(self, orbit_iter):
         for orbit_desc in orbit_iter:

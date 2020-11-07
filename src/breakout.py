@@ -1,3 +1,7 @@
+"""Breakout"""
+# pylint: disable=invalid-name
+# pylint: disable=missing-function-docstring
+# pylint: disable=missing-class-docstring
 from collections import namedtuple
 import sys
 from . import intcode
@@ -8,6 +12,7 @@ Ball = namedtuple('Ball', ['x', 'y'])
 
 
 class Game:
+    # pylint: disable=too-many-instance-attributes
     def __init__(self, prog, freeplay=False, show=False):
         self.prog = prog
         self.xmax, self.ymax = 0, 0

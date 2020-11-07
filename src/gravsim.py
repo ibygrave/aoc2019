@@ -1,3 +1,7 @@
+"""The N-Body Problem"""
+# pylint: disable=invalid-name
+# pylint: disable=missing-function-docstring
+# pylint: disable=missing-class-docstring
 from math import gcd
 import re
 import sys
@@ -23,7 +27,7 @@ class Coord:
         self.c += self.dc
 
 
-CNAMES = ['x', 'y', 'z']
+CNAMES = ('x', 'y', 'z')
 
 
 class MoonSim:

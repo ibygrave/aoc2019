@@ -1,3 +1,9 @@
+"""utils"""
+# pylint: disable=invalid-name
+# pylint: disable=missing-function-docstring
+# pylint: disable=missing-class-docstring
+
+
 def input_ints(input_name):
     with open(input_name) as input_file:
         for input_line in input_file:

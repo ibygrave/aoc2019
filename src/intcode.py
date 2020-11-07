@@ -1,3 +1,7 @@
+"""IntCode Computer"""
+# pylint: disable=invalid-name
+# pylint: disable=missing-function-docstring
+# pylint: disable=missing-class-docstring
 from collections import namedtuple
 import itertools
 import sys
@@ -26,6 +30,8 @@ class ElasticList(list):
 
 
 class Program:
+    # pylint: disable=too-many-instance-attributes
+    # pylint: disable=attribute-defined-outside-init
     def __init__(self, init, clone=None):
         if clone is not None:
             self.mem = clone.mem[:]
@@ -43,8 +49,7 @@ class Program:
     def param_mode(self, param_ix):
         if param_ix > len(self.param_modes):
             return 0
-        else:
-            return self.param_modes[param_ix-1]
+        return self.param_modes[param_ix-1]
 
     def get_param(self, param_ix):
         mode = self.param_mode(param_ix)
@@ -52,14 +57,13 @@ class Program:
         if mode == 0:
             # position
             return self.mem[param]
-        elif mode == 1:
+        if mode == 1:
             # immediate
             return param
-        elif mode == 2:
+        if mode == 2:
             # relative
             return self.mem[self.rbase + param]
-        else:
-            raise SomethingWentWrong(f"unknown parameter mode {mode}")
+        raise SomethingWentWrong(f"unknown parameter mode {mode}")
 
     def put_param(self, param_ix, val):
         mode = self.param_mode(param_ix)
@@ -77,6 +81,8 @@ class Program:
             raise SomethingWentWrong(f"unknown parameter mode {mode}")
 
     def step(self):
+        # pylint: disable=too-many-branches
+        # pylint: disable=too-many-statements
         next_pc = self.pc
         next_rbase = self.rbase
         instr = self.mem[self.pc]
@@ -122,7 +128,7 @@ class Program:
                 self.put_param(3, 0)
             next_pc += 4  # 1 opcode, 3 params
         elif opcode == 9:
-            """adjusts the relative base"""
+            # adjusts the relative base
             next_rbase += self.get_param(1)
             next_pc += 2  # 1 opcode, 1 param
         elif opcode == 99:
@@ -150,11 +156,10 @@ class Program:
             self.step()
         if self.next_out is None:
             raise StopIteration()
-        else:
-            return self.next_out
+        return self.next_out
 
 
-def run_test_program(prog, system_ids=[1]):
+def run_test_program(prog, system_ids=(1,)):
     prog.set_input(system_ids)
     outputs = list(prog)
     errors, diagnostic = outputs[:-1], outputs[-1]
@@ -173,6 +178,7 @@ def control_amps(prog, phases, signal=0):
 
 
 def feedback_control_amps(prog, phases, signal=0):
+    # pylint: disable=used-before-assignment
     ctrls = []
     for phase in phases:
         ctrl = Program(prog)
@@ -212,10 +218,11 @@ def search_params(start_prog, want_out):
             experiment.mem[2] = verb
             try:
                 list(experiment)
-            except SomethingWentWrong as err:
+            except SomethingWentWrong:
                 continue
             if experiment.mem[0] == want_out:
                 return f"Found noun = {noun}, verb = {verb}"
+    return "Not found"
 
 
 def day2():

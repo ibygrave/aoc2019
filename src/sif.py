@@ -1,8 +1,12 @@
+"""Space Image Format"""
+# pylint: disable=invalid-name
+# pylint: disable=missing-function-docstring
+# pylint: disable=missing-class-docstring
 import sys
 import numpy
 
 
-class Image(object):
+class Image:
     def __init__(self, width, height):
         self.width = width
         self.height = height

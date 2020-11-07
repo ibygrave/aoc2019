@@ -1,3 +1,7 @@
+"""Flawed Frequency Transmission"""
+# pylint: disable=invalid-name
+# pylint: disable=missing-function-docstring
+# pylint: disable=missing-class-docstring
 from itertools import count, islice
 import sys
 import numpy

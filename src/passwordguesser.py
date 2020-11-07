@@ -1,5 +1,7 @@
-import sys
-
+"""Password Guesser"""
+# pylint: disable=invalid-name
+# pylint: disable=missing-function-docstring
+# pylint: disable=missing-class-docstring
 DLEN = 6
 
 

@@ -1,3 +1,7 @@
+"""Space Stoichiometry"""
+# pylint: disable=invalid-name
+# pylint: disable=missing-function-docstring
+# pylint: disable=missing-class-docstring
 import functools
 import re
 import sys
@@ -63,6 +67,7 @@ class Factory:
         self.chem_amounts[self.chem_ix[name]] = amount
 
     def reduce(self):
+        # pylint: disable=cell-var-from-loop
         reacting = True
         while reacting:
             reacting = False
@@ -94,9 +99,8 @@ def fuel_given_ore(factory, ore_budget, first_step=1000):
         factory['FUEL'] -= more_fuel
         factory.reduce()
         fuel_got += more_fuel
-    else:
-        # Last one went over budget
-        fuel_got -= more_fuel
+    # Last one went over budget
+    fuel_got -= more_fuel
     return fuel_got
 
 

@@ -1,3 +1,7 @@
+"""Crossed Wires"""
+# pylint: disable=invalid-name
+# pylint: disable=missing-function-docstring
+# pylint: disable=missing-class-docstring
 from collections import namedtuple
 import sys
 
@@ -5,6 +9,7 @@ Point = namedtuple('Point', ['x', 'y', 'steps'])
 
 
 class Horiz(namedtuple('Horiz', ['y', 'xmin', 'xmax', 'lsteps', 'rsteps'])):
+    # pylint: disable=inconsistent-return-statements
     __slots__ = ()
 
     def intersect(self, v):
@@ -27,7 +32,7 @@ class Vert(namedtuple('Vert', ['x', 'ymin', 'ymax', 'bsteps', 'tsteps'])):
         return h.intersect(self)
 
 
-class WireReader(object):
+class WireReader:
     def __init__(self):
         self.x = 0
         self.y = 0
@@ -82,7 +87,7 @@ def cross_intersect(mine, yours):
                 yield i
 
 
-class Wire(object):
+class Wire:
     def __init__(self, text):
         r = WireReader()
         r.read(text)

@@ -1,3 +1,7 @@
+"""Asteroids"""
+# pylint: disable=invalid-name
+# pylint: disable=missing-function-docstring
+# pylint: disable=missing-class-docstring
 from collections import defaultdict
 from math import atan2, gcd
 import sys
@@ -5,6 +9,7 @@ from .utils import pairs
 
 
 class Asteroid:
+    # pylint: disable=too-few-public-methods
     __slots__ = ['x', 'y', 'detects', 'r']
 
     def __init__(self, x, y):
@@ -16,6 +21,7 @@ class Asteroid:
         # delta x = dx * r
         # delta y = dy * r
         # dx and dy have no common factors
+        self.r = 1
 
     def polar_from_ims(self, ims_x, ims_y):
         dx = self.x - ims_x
@@ -27,7 +33,7 @@ class Asteroid:
         return (dx, dy)
 
 
-class AsteroidMap(object):
+class AsteroidMap:
     def __init__(self, mapstr):
         self.asteroids = []
         self.grid = []
@@ -59,7 +65,7 @@ class AsteroidMap(object):
             return True
         dx = dx // g
         dy = dy // g
-        for s in range(g-1):
+        for _ in range(g-1):
             x += dx
             y += dy
             if self.grid[y][x] is not None:
