@@ -1,0 +1,4 @@
+part 1
+AmpControl(signal=440880, phases=[3, 2, 4, 0, 1])
+part 2
+AmpControl(signal=3745599, phases=[5, 7, 9, 6, 8])

@@ -1,0 +1,4 @@
+part 1
+3224742
+part 2
+Found noun = 79, verb = 60
